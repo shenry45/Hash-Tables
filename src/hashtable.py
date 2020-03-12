@@ -54,7 +54,15 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # get hashed value
+        index = self._hash_mod(key)
+        
+        # see if hashed value exists
+        if self.storage[index] is not None:
+            print('ERROR: value found')
+        else:
+            self.storage[index] = LinkedPair(key, value)
+
 
 
 
@@ -66,7 +74,13 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # get hashed value
+        index = self._hash_mod(key)
+
+        if self.storage[index] is not None:
+            self.storage[index] = None
+        else:
+            print('Error, key not found')
 
 
     def retrieve(self, key):
@@ -77,7 +91,10 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # get hashed value
+        index = self._hash_mod(key)
+
+        return self.storage[index].value
 
 
     def resize(self):
@@ -87,7 +104,15 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        old_table = self.storage
+        self.capacity = self.capacity * 2
+        self.storage = [None] * self.capacity
+
+        for item in old_table:
+            if item is None:
+                return
+            else:
+                self.insert(item.key, item.value)
 
 
 
