@@ -57,7 +57,6 @@ class HashTable:
         '''
         # get hashed value
         index = self._hash_mod(key)
-        print(index, key, value)
         
         # see if hashed value exists
         if self.storage[index] is not None:
@@ -70,12 +69,10 @@ class HashTable:
             current_pair = self.storage[index]
 
             while current_pair is not None:
-                print('*** FIND ***', key, current_pair.key, current_pair.value)
                 # if key match
                 if current_pair.key == key:
                     # update value with new value
                     current_pair.value = value
-                    print('*** UPDATE ***', current_pair.key, current_pair.value)
                     return
 
                 if current_pair.next is not None:
@@ -84,12 +81,10 @@ class HashTable:
                 else: 
                     # no match, add to end of LinkedPair chain
                     current_pair.next = LinkedPair(key, value)
-                    print(f"INSERT {key} at {index}")
                 
         else:
             # no value at storage index
             self.storage[index] = LinkedPair(key, value)
-            print(f"INSERT {key} at {index}")
 
         self.count += 1
 
@@ -101,15 +96,27 @@ class HashTable:
         Print a warning if the key is not found.
 
         Fill this in.
-        '''
+        ''' 
         # get hashed value
         index = self._hash_mod(key)
 
         if self.storage[index] is not None:
-            self.storage[index] = None
+            current_pair = self.storage[index]
+
+            if current_pair.key == key:
+                    self.storage[index] = None
+                    return
+
+            while current_pair is not None:
+                if current_pair.key == key:
+                    current_pair = current_pair.next
+                    return
+
+                current_pair = current_pair.next
+            
         else:
             print('Error, key not found')
-            return
+            return None
 
 
     def retrieve(self, key):
@@ -129,7 +136,6 @@ class HashTable:
             current_pair = self.storage[index]
 
             while current_pair is not None:
-                print('---looking for key', key, current_pair.key, current_pair.value)
                 if current_pair.key == key:
                     return current_pair.value
                 
@@ -138,7 +144,6 @@ class HashTable:
             print('key not found')
             return
             
-
 
     def resize(self):
         '''
