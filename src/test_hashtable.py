@@ -41,6 +41,7 @@ class TestHashTable(unittest.TestCase):
         self.assertTrue(return_value == "val-9")
 
     def test_hash_table_insertion_overwrites_correctly(self):
+        print('\n\n overwrites \n')
         ht = HashTable(8)
 
         ht.insert("key-0", "val-0")
@@ -87,6 +88,8 @@ class TestHashTable(unittest.TestCase):
         self.assertTrue(return_value == "new-val-9")
 
     def test_hash_table_removes_correctly(self):
+        print('\n\n removal \n\n')
+
         ht = HashTable(8)
 
         ht.insert("key-0", "val-0")
@@ -154,6 +157,7 @@ class TestHashTable(unittest.TestCase):
         self.assertTrue(return_value is None)
 
     def test_hash_table_resize(self):
+        print('\n\n resize \n\n')
         ht = HashTable(8)
 
         ht.insert("key-0", "val-0")

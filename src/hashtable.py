@@ -14,6 +14,7 @@ class HashTable:
     '''
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
+        self.count = 0
         self.storage = [None] * capacity
 
 
@@ -56,14 +57,41 @@ class HashTable:
         '''
         # get hashed value
         index = self._hash_mod(key)
+        print(index, key, value)
         
         # see if hashed value exists
         if self.storage[index] is not None:
-            print('ERROR: value found')
+            # match at first linkedPair, 
+            if self.storage[index].key == key:
+                self.storage[index].value = value
+                return
+
+            ## take in index and iterate through to end of LinkedPairs to add to end
+            current_pair = self.storage[index]
+
+            while current_pair is not None:
+                print('*** FIND ***', key, current_pair.key, current_pair.value)
+                # if key match
+                if current_pair.key == key:
+                    # update value with new value
+                    current_pair.value = value
+                    print('*** UPDATE ***', current_pair.key, current_pair.value)
+                    return
+
+                if current_pair.next is not None:
+                    # no match, iterate to next
+                    current_pair = current_pair.next
+                else: 
+                    # no match, add to end of LinkedPair chain
+                    current_pair.next = LinkedPair(key, value)
+                    print(f"INSERT {key} at {index}")
+                
         else:
+            # no value at storage index
             self.storage[index] = LinkedPair(key, value)
+            print(f"INSERT {key} at {index}")
 
-
+        self.count += 1
 
 
     def remove(self, key):
@@ -81,6 +109,7 @@ class HashTable:
             self.storage[index] = None
         else:
             print('Error, key not found')
+            return
 
 
     def retrieve(self, key):
@@ -94,7 +123,21 @@ class HashTable:
         # get hashed value
         index = self._hash_mod(key)
 
-        return self.storage[index].value
+        if self.storage[index] is None:
+            return None
+        else:
+            current_pair = self.storage[index]
+
+            while current_pair is not None:
+                print('---looking for key', key, current_pair.key, current_pair.value)
+                if current_pair.key == key:
+                    return current_pair.value
+                
+                current_pair = current_pair.next
+            
+            print('key not found')
+            return
+            
 
 
     def resize(self):
@@ -108,11 +151,11 @@ class HashTable:
         self.capacity = self.capacity * 2
         self.storage = [None] * self.capacity
 
-        for item in old_table:
-            if item is None:
+        for headPair in old_table:
+            if headPair is None:
                 return
             else:
-                self.insert(item.key, item.value)
+                self.insert(headPair.key, headPair.value)
 
 
 
