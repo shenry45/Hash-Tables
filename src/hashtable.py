@@ -57,6 +57,9 @@ class HashTable:
         '''
         # get hashed value
         index = self._hash_mod(key)
+        print(f"Key {key}, value {value} in index {index}")
+
+        print(index)
         
         # see if hashed value exists
         if self.storage[index] is not None:
@@ -157,11 +160,15 @@ class HashTable:
         self.storage = [None] * self.capacity
 
         for headPair in old_table:
-            if headPair is None:
-                return
-            else:
+            if headPair is not None:
+                current_pair = headPair
+                print(headPair, headPair.key, headPair.value)
                 self.insert(headPair.key, headPair.value)
 
+                while current_pair.next is not None:
+                    print('next values', current_pair.next.key, current_pair.next.value)
+                    self.insert(current_pair.next.key, current_pair.next.value)
+                    current_pair = current_pair.next
 
 
 if __name__ == "__main__":
